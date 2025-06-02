@@ -11,6 +11,7 @@ WORKDIR /app
 COPY requirements.txt .
 
 RUN pip3 install --no-cache-dir --break-system-packages -r requirements.txt
+RUN mkdir /mnt/images && chown appuser:appuser /mnt/images
 
 
 # 4. Den restlichen Code ins Image kopieren
