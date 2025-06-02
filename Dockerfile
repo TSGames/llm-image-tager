@@ -11,13 +11,13 @@ WORKDIR /app
 COPY requirements.txt .
 
 RUN pip3 install --no-cache-dir --break-system-packages -r requirements.txt
-RUN useradd -m appuser
-RUN mkdir -p /mnt/images && chown appuser:appuser /mnt/images
+#RUN useradd -m appuser
+#RUN mkdir -p /mnt/images && chown appuser:appuser /mnt/images
 
 
 # 4. Den restlichen Code ins Image kopieren
 COPY . .
 
-USER appuser
+#USER appuser
 
 CMD ["python3", "llm.py"]
