@@ -15,7 +15,12 @@ PROMPT = os.getenv('PROMPT', 'Erzeuge 5 bis 10 passende Schlagworte für dieses 
 FIXED_KEYWORD = os.getenv('FIXED_KEYWORD', 'LLM-Generated')
 OLLAMA_HOST = os.getenv('OLLAMA_HOST', 'http://ollama:11434')
 
-# docker
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='[%(asctime)s] %(levelname)s: %(message)s',
+)
+
 ollama = ollama.Client(
   host = OLLAMA_HOST,
 )
