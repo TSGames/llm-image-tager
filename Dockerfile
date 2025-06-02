@@ -16,3 +16,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 USER appuser
+
+CMD ["python", "llm.py"]

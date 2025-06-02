@@ -15,6 +15,8 @@ services:
       OLLAMA_HOST: ${OLLAMA_HOST}
       DEBUG: ${DEBUG:-false}
     command: python main.py
+    volumes:
+      - ${IMAGE_PATH}:/mnt/images
 
 volumes:
   ollama:

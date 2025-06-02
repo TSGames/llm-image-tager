@@ -3,6 +3,7 @@ import json
 import os
 from io import BytesIO
 from pathlib import Path
+import logging
 
 import ollama
 import pyexiv2
@@ -40,9 +41,9 @@ class LLM:
         metadata.read()
         existing = metadata.get('Iptc.Application2.Keywords', None)
         if existing and FIXED_KEYWORD in existing.value:
-            print('skipping tagging for ' + image_path)
+            logging.info('skipping tagging for ' + image_path)
             return
-        print('tagging  ' + image_path)
+        logging.info('tagging  ' + image_path)
         data_uri = self.image_to_base64_data_uri(image_path)
         #                ChatCompletionRequestUserMessage(role='user', content=PROMPT)
         response = ollama.chat(
@@ -68,12 +69,12 @@ class LLM:
             }
         )
         keywords = json.loads(response.message.content)['keywords']
-        print(keywords)
+        logging.info(keywords)
         if len(keywords) > 0:
             keywords = keywords + [FIXED_KEYWORD]
             if existing:
                 keywords = list(set(keywords) | set(existing.value))
-            print(keywords)
+            logging.info(keywords)
             metadata['Iptc.Application2.Keywords'] = keywords
             metadata.write()
 
@@ -81,7 +82,8 @@ class LLM:
         jpeg_files = [f for f in Path(folder_path).rglob("*") if f.suffix.lower() in ['.jpg', '.jpeg']]
         for file in jpeg_files:
             self.classify_file(str(file))
+        logging.info("Finished classifying " + str(len(jpeg_files)) + " images")
 
 
 
-LLM().classify_folder("/mnt/share2/2025/05")
+LLM().classify_folder("/mnt/images")
