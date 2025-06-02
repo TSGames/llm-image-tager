@@ -22,6 +22,7 @@ ollama = ollama.Client(
 
 class LLM:
     def __init__(self):
+        logging.info("Preparing model " + MODEL)
         ollama.pull(MODEL)
 
     def image_to_base64_data_uri(self, image_path):
