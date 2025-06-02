@@ -10,11 +10,9 @@ services:
       context: .
     image: tsgames/llm-image-tager:latest
     environment:
-      MODEL: ${MODEL}
-      PROMPT: ${PROMPT}
-      OLLAMA_HOST: ${OLLAMA_HOST}
-      DEBUG: ${DEBUG:-false}
-    command: python main.py
+      MODEL:
+      PROMPT:
+      OLLAMA_HOST:
     volumes:
       - ${IMAGE_PATH}:/mnt/images
 

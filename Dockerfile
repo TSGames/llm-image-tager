@@ -16,6 +16,7 @@ RUN pip3 install --no-cache-dir --break-system-packages -r requirements.txt
 # 4. Den restlichen Code ins Image kopieren
 COPY . .
 
+RUN useradd -m appuser
 USER appuser
 
 CMD ["python3", "llm.py"]
