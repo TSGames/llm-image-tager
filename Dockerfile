@@ -10,7 +10,7 @@ WORKDIR /app
 # 3. Requirements zuerst kopieren und installieren (Docker Cache nutzen)
 COPY requirements.txt .
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 
 # 4. Den restlichen Code ins Image kopieren
