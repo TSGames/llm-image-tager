@@ -82,6 +82,7 @@ class LLM:
             keywords = keywords + [FIXED_KEYWORD]
             if existing:
                 keywords = list(set(keywords) | set(existing.value))
+            keywords = [k.capitalize() for k in keywords]
             logging.info(keywords)
             metadata['Iptc.Application2.Keywords'] = keywords
             metadata.write()
