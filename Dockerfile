@@ -18,4 +18,4 @@ COPY . .
 
 USER appuser
 
-CMD ["python", "llm.py"]
+CMD ["python3", "llm.py"]
