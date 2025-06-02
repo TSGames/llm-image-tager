@@ -1,7 +1,7 @@
 FROM python:3.13-slim
 
 RUN apt-get update
-RUN apt-get install build-essential cmake libexiv2-dev libboost-python-dev -y
+RUN apt-get install build-essential cmake libexiv2-dev python3-dev libboost-python-dev -y
 
 # 2. Arbeitsverzeichnis im Container setzen
 WORKDIR /app
