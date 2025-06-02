@@ -4,6 +4,7 @@ import os
 from io import BytesIO
 from pathlib import Path
 import logging
+import time
 
 import ollama
 import pyexiv2
@@ -14,6 +15,7 @@ MODEL = os.getenv('MODEL', 'gemma3:4b')
 PROMPT = os.getenv('PROMPT', 'Erzeuge 5 bis 10 passende Schlagworte für dieses Bild in Deutsch.')
 FIXED_KEYWORD = os.getenv('FIXED_KEYWORD', 'LLM-Generated')
 OLLAMA_HOST = os.getenv('OLLAMA_HOST', 'http://ollama:11434')
+SLEEP_DURATION_SEC = os.getenv('SLEEP_DURATION_SEC', 60)
 
 
 logging.basicConfig(
@@ -91,5 +93,7 @@ class LLM:
         logging.info("Finished classifying " + str(len(jpeg_files)) + " images")
 
 
-
-LLM().classify_folder("/mnt/images")
+while True:
+    LLM().classify_folder("/mnt/images")
+    logging.info("Sleeping for " + str(SLEEP_DURATION_SEC) + " seconds")
+    time.sleep(SLEEP_DURATION_SEC)
