@@ -82,10 +82,9 @@ class LLM:
         keywords = json.loads(response.message.content)['keywords']
         logging.info(keywords)
         if len(keywords) > 0:
-            keywords = keywords + [FIXED_KEYWORD]
+            keywords = [k.capitalize() for k in keywords] + [FIXED_KEYWORD]
             if existing:
                 keywords = list(set(keywords) | set(existing.value))
-            keywords = [k.capitalize() for k in keywords]
             logging.info(keywords)
             metadata['Iptc.Application2.Keywords'] = keywords
             metadata.write()
