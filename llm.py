@@ -5,14 +5,18 @@ from io import BytesIO
 from pathlib import Path
 import logging
 import time
+import moondream
 
 import ollama
 import pyexiv2
 from PIL import Image
 from PIL.Image import Resampling
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from PIL import Image
+
 
 MODEL = os.getenv('MODEL', 'gemma3:4b')
-PROMPT = os.getenv('PROMPT', 'Erzeuge 5 bis 10 passende Schlagworte für dieses Bild in Deutsch.')
+PROMPT = os.getenv('PROMPT', 'Generate 5 - 10 keywords for this image and split them by ";"')
 FIXED_KEYWORD = os.getenv('FIXED_KEYWORD', 'LLM-Generated')
 OLLAMA_HOST = os.getenv('OLLAMA_HOST', 'http://ollama:11434')
 IMAGE_PATH = os.getenv('IMAGE_PATH', '/mnt/images')
@@ -31,8 +35,14 @@ ollama = ollama.Client(
 
 class LLM:
     def __init__(self):
-        logging.info("Preparing model " + MODEL)
-        ollama.pull(MODEL)
+        logging.info("Preparing model " + "vikhyatk/moondream2")
+        self.model = moondream.vl(endpoint="http://localhost:2020/v1")
+        # ollama.pull(MODEL)
+        #self.model = AutoModelForCausalLM.from_pretrained(
+        #    "vikhyatk/moondream2",
+        #    revision="2025-04-14",
+        #    trust_remote_code=True,
+        #)
 
     def image_to_base64_data_uri(self, image_path):
         # 896
@@ -55,32 +65,37 @@ class LLM:
             logging.info('skipping classifying for ' + image_path)
             return
         logging.info('classifying  ' + image_path)
-        data_uri = self.image_to_base64_data_uri(image_path)
-        #                ChatCompletionRequestUserMessage(role='user', content=PROMPT)
-        response = ollama.chat(
-            model=MODEL,
-            messages=[{
-                'role': 'user',
-                'content': PROMPT,
-                'images': [data_uri]
-            }],
-            format = {
-                "type": "object",
-                "properties": {
-                    "keywords": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    }
-                },
-                "required": [
-                    "keywords"
-                ]
-            }
-        )
-        keywords = json.loads(response.message.content)['keywords']
+
+        image = Image.open(image_path).resize((IMAGE_SIZE, IMAGE_SIZE), resample=Resampling.BICUBIC)
+        text = self.model.query(image, PROMPT)["answer"]
+        keywords = [part.strip() for part in text.split(";") if part.strip()]
         logging.info(keywords)
+
+        #data_uri = self.image_to_base64_data_uri(image_path)
+        #                ChatCompletionRequestUserMessage(role='user', content=PROMPT)
+        # response = ollama.chat(
+        #     model=MODEL,
+        #     messages=[{
+        #         'role': 'user',
+        #         'content': PROMPT,
+        #         'images': [data_uri]
+        #     }],
+        #     format = {
+        #         "type": "object",
+        #         "properties": {
+        #             "keywords": {
+        #                 "type": "array",
+        #                 "items": {
+        #                     "type": "string"
+        #                 }
+        #             }
+        #         },
+        #         "required": [
+        #             "keywords"
+        #         ]
+        #     }
+        # )
+        # keywords = json.loads(response.message.content)['keywords']
         if len(keywords) > 0:
             keywords = [k.capitalize() for k in keywords] + [FIXED_KEYWORD]
             if existing:

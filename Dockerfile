@@ -2,7 +2,8 @@
 FROM ubuntu:24.04
 
 RUN apt-get update
-RUN apt-get install python3 build-essential cmake python3-pip python3-all-dev libexiv2-dev python3-dev libboost-python-dev -y
+RUN apt-get install curl python3 python3-pip build-essential cmake  python3-all-dev libexiv2-dev python3-dev libboost-python-dev -y
+
 
 # 2. Arbeitsverzeichnis im Container setzen
 WORKDIR /app
@@ -11,6 +12,9 @@ WORKDIR /app
 COPY requirements.txt .
 
 RUN pip3 install --no-cache-dir --break-system-packages -r requirements.txt
+
+RUN curl https://depot.moondream.ai/station/install.sh | bash
+
 #RUN useradd -m appuser
 #RUN mkdir -p /mnt/images && chown appuser:appuser /mnt/images
 
@@ -20,4 +24,4 @@ COPY . .
 
 #USER appuser
 
-CMD ["python3", "llm.py"]
+CMD ["sh", "-c", "./moondream_station && python3 llm.py && wait"]

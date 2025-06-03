@@ -22,9 +22,18 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
+    - name: Set Image Tag
+      id: vars
+      run: |
+        if [ "${{ github.ref_name }}" = "main" ]; then
+          echo "tag=latest" >> $GITHUB_OUTPUT
+        else
+          echo "tag=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+        fi
+
     - name: Build and push Docker image
       uses: docker/build-push-action@v5
       with:
         context: .
         push: true
-        tags: tsgames/llm-image-tager:latest
+        tags: tsgames/llm-image-tager::${{ steps.vars.outputs.tag }}
