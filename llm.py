@@ -35,8 +35,8 @@ class LLM:
         ollama.pull(MODEL)
 
     def image_to_base64_data_uri(self, image_path):
-        # Lade das Bild
         # 896
+        logging.info('resizing to ' + str(IMAGE_SIZE))
         image_resized = Image.open(image_path).resize((IMAGE_SIZE, IMAGE_SIZE), resample=Resampling.BICUBIC).convert("RGB")
         buffered = BytesIO()
         image_resized.save(buffered, format="JPEG", quality=90)
@@ -44,6 +44,7 @@ class LLM:
 
         # Bytes zu Base64 string
         img_base64 = base64.b64encode(img_bytes).decode('utf-8')
+        logging.info('resizing done')
         return f"{img_base64}"
 
     def classify_file(self, image_path: str):
