@@ -17,6 +17,7 @@ services:
       IMAGE_SIZE:
     volumes:
       - ${IMAGE_PATH}:/mnt/images
+      - moondream:/root/.cache/huggingface
 
 volumes:
   ollama:
