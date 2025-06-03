@@ -8,6 +8,8 @@ services:
       - "11434:11434"
   app:
     image: tsgames/llm-image-tager:latest
+    build:
+      context: .
     environment:
       MODEL:
       PROMPT:
@@ -18,3 +20,4 @@ services:
 
 volumes:
   ollama:
+  moondream:
