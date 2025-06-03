@@ -15,7 +15,7 @@ MODEL = os.getenv('MODEL', 'gemma3:4b')
 PROMPT = os.getenv('PROMPT', 'Erzeuge 5 bis 10 passende Schlagworte für dieses Bild in Deutsch.')
 FIXED_KEYWORD = os.getenv('FIXED_KEYWORD', 'LLM-Generated')
 OLLAMA_HOST = os.getenv('OLLAMA_HOST', 'http://ollama:11434')
-PATH = os.getenv('PATH', '/mnt/images')
+IMAGE_PATH = os.getenv('IMAGE_PATH', '/mnt/images')
 SLEEP_DURATION_SEC = os.getenv('SLEEP_DURATION_SEC', 60)
 IMAGE_SIZE = os.getenv('IMAGE_SIZE', 128)
 
@@ -101,6 +101,6 @@ class LLM:
 
 llm = LLM()
 while True:
-    llm.classify_folder(PATH)
+    llm.classify_folder(IMAGE_PATH)
     logging.info("Sleeping for " + str(SLEEP_DURATION_SEC) + " seconds")
     time.sleep(SLEEP_DURATION_SEC)
