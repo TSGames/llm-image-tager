@@ -92,14 +92,15 @@ class LLM:
 
     def classify_folder(self, folder_path):
         jpeg_files = [f for f in Path(folder_path).rglob("*") if f.suffix.lower() in ['.jpg', '.jpeg']]
+        logging.info('Read ' + str(len(jpeg_files)) + ' files inside ' + folder_path)
         for file in jpeg_files:
             if any(part == "@eaDir" for part in file.parts):
                 continue
             self.classify_file(str(file))
         logging.info("Finished classifying " + str(len(jpeg_files)) + " images")
 
-
+llm = LLM()
 while True:
-    LLM().classify_folder(PATH)
+    llm.classify_folder(PATH)
     logging.info("Sleeping for " + str(SLEEP_DURATION_SEC) + " seconds")
     time.sleep(SLEEP_DURATION_SEC)
