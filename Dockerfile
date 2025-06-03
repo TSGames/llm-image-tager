@@ -24,4 +24,4 @@ COPY . .
 
 #USER appuser
 
-CMD ["sh", "-c", "echo 'exit' | ./moondream_station && python3 llm.py && wait"]
+CMD ["sh", "-c", "./moondream_station <<EOF\\nexit\\nEOF && python3 llm.py && wait"]
