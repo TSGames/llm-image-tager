@@ -35,4 +35,4 @@ jobs:
       with:
         context: .
         push: true
-        tags: tsgames/llm-image-tager::${{ steps.vars.outputs.tag }}
+        tags: tsgames/llm-image-tager:${{ steps.vars.outputs.tag }}
