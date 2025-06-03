@@ -1,4 +1,5 @@
 services:
+  # requires a synology nas with 8+ GB memory minimum!
   ollama:
     image: ollama/ollama:0.9.0
     volumes:
@@ -11,6 +12,7 @@ services:
       MODEL:
       PROMPT:
       OLLAMA_HOST:
+      IMAGE_SIZE:
     volumes:
       - ${IMAGE_PATH}:/mnt/images
 
