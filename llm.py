@@ -88,6 +88,7 @@ class LLM:
             logging.info(keywords)
             metadata['Iptc.Application2.Keywords'] = keywords
             metadata.write()
+            os.utime(image_path)
 
     def classify_folder(self, folder_path):
         jpeg_files = [f for f in Path(folder_path).rglob("*") if f.suffix.lower() in ['.jpg', '.jpeg']]
