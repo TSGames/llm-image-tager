@@ -17,7 +17,7 @@ FIXED_KEYWORD = os.getenv('FIXED_KEYWORD', 'LLM-Generated')
 OLLAMA_HOST = os.getenv('OLLAMA_HOST', 'http://ollama:11434')
 PATH = os.getenv('PATH', '/mnt/images')
 SLEEP_DURATION_SEC = os.getenv('SLEEP_DURATION_SEC', 60)
-IMAGE_SIZE = os.getenv('IMAGE_SIZE', '128')
+IMAGE_SIZE = os.getenv('IMAGE_SIZE', 128)
 
 
 logging.basicConfig(
