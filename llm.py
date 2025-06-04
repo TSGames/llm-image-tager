@@ -57,7 +57,7 @@ class LLM:
         if existing and FIXED_TAG in existing.value:
             logging.info('skipping classifying for ' + image_path)
             return
-        if SKIP_MANUALLY_TAGGED and len(existing.value) > 0:
+        if SKIP_MANUALLY_TAGGED and (len(existing.value) if existing else 0) > 0:
             logging.info('skipping manually taged file ' + image_path)
             return
         logging.info('classifying  ' + image_path)

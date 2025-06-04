@@ -20,3 +20,10 @@ A Synology nas with docker support, a x86 CPU and (in case of running the networ
 4. Deploy the stack
 5. Wait until ollama has downloaded the model and watch the logs of the `app` container
 
+## External ollama
+
+Especially for the first indexing, it is strongly advised to run ollama on an external pc with a gpu.
+Learn more at https://github.com/ollama/ollama
+Make sure to set OLLAMA_HOST to 0.0.0.0 to allow external access from your NAS.
+
+Then, set the value `OLLAMA_HOST` in the `docker-compose.yml` file to your pc, i.e. http://192.168.1.1:11434
