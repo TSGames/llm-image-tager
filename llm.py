@@ -39,8 +39,8 @@ class LLM:
 
     def image_to_base64_data_uri(self, image_path):
         # 896
-        logging.info('resizing to ' + str(KEEP_EXISTING_TAGS))
-        image_resized = Image.open(image_path).resize((KEEP_EXISTING_TAGS, KEEP_EXISTING_TAGS), resample=Resampling.BICUBIC).convert("RGB")
+        logging.info('resizing to ' + str(IMAGE_SIZE))
+        image_resized = Image.open(image_path).resize((IMAGE_SIZE, IMAGE_SIZE), resample=Resampling.BICUBIC).convert("RGB")
         buffered = BytesIO()
         image_resized.save(buffered, format="JPEG", quality=90)
         img_bytes = buffered.getvalue()
