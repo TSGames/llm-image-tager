@@ -14,13 +14,13 @@ from PIL.Image import Resampling
 MODEL = os.getenv('MODEL', 'gemma3:4b')
 PROMPT = os.getenv('PROMPT', 'Erzeuge 5 bis 10 passende Schlagworte für dieses Bild in Deutsch.')
 FIXED_TAG = os.getenv('FIXED_TAG', 'LLM-Generated')
-KEEP_EXISTING_TAGS = os.getenv('KEEP_EXISTING_TAGS', True)
+KEEP_EXISTING_TAGS = os.getenv('KEEP_EXISTING_TAGS', 'true').lower() == 'true'
 # Skip images already having tags but not the FIXED_TAG assigned
-SKIP_MANUALLY_TAGGED = os.getenv('SKIP_MANUALLY_TAGGED', True)
+SKIP_MANUALLY_TAGGED = os.getenv('SKIP_MANUALLY_TAGGED', 'true').lower() == 'true'
 OLLAMA_HOST = os.getenv('OLLAMA_HOST', 'http://ollama:11434')
 IMAGE_PATH = os.getenv('IMAGE_PATH', '/mnt/images')
-SLEEP_DURATION_SEC = os.getenv('SLEEP_DURATION_SEC', 60)
-IMAGE_SIZE = os.getenv('IMAGE_SIZE', 896)
+SLEEP_DURATION_SEC = int(os.getenv('SLEEP_DURATION_SEC', 60))
+IMAGE_SIZE = int(os.getenv('IMAGE_SIZE', 896))
 
 
 logging.basicConfig(
