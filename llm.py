@@ -5,11 +5,13 @@ from io import BytesIO
 from pathlib import Path
 import logging
 import time
+import shutil
 
 import ollama
 import pyexiv2
 from PIL import Image
 from PIL.Image import Resampling
+from PIL.ImageOps import expand
 
 MODEL = os.getenv('MODEL', 'gemma3:4b')
 PROMPT = os.getenv('PROMPT', 'Erzeuge 5 bis 10 passende Schlagworte für dieses Bild in Deutsch.')
@@ -36,6 +38,18 @@ class LLM:
     def __init__(self):
         logging.info("Preparing model " + MODEL)
         ollama.pull(MODEL)
+
+    def delete_matching_eadir_files(self, image_path):
+        if not os.path.isfile(image_path):
+            return
+        filename = os.path.basename(image_path)
+        root_dir = os.path.dirname(image_path) + "/@eaDi/r"
+        shutil.rmtree(root_dir + filename, ignore_errors=True)
+        try:
+            os.unlink(root_dir + filename + "@SynoEAStream")
+            logging.info(f"Deleted metadata for {filename}")
+        except Exception as e:
+            logging.error(f"Error deleting metadata for {filename}: {e}")
 
     def image_to_base64_data_uri(self, image_path):
         # 896
@@ -93,8 +107,10 @@ class LLM:
                 tags = list(set(tags) | set(existing_tags.value))
             logging.info(tags)
             metadata['Iptc.Application2.Keywords'] = tags
+            atime, mtime = os.stat(image_path).st_atime, os.stat(image_path).st_mtime
             metadata.write()
-            os.utime(image_path)
+            os.utime(image_path, (atime, mtime))
+            self.delete_matching_eadir_files(image_path)
 
     def classify_folder(self, folder_path):
         jpeg_files = [f for f in Path(folder_path).rglob("*") if f.suffix.lower() in ['.jpg', '.jpeg']]
