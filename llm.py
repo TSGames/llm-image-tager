@@ -53,11 +53,11 @@ class LLM:
     def classify_file(self, image_path: str):
         metadata = pyexiv2.ImageMetadata(image_path)
         metadata.read()
-        existing = metadata.get('Iptc.Application2.Keywords', None)
-        if existing and FIXED_TAG in existing.value:
+        existing_tags = metadata.get('Iptc.Application2.Keywords', None)
+        if existing_tags and FIXED_TAG in existing_tags.value:
             logging.info('skipping classifying for ' + image_path)
             return
-        if SKIP_MANUALLY_TAGGED and (len(existing.value) if existing else 0) > 0:
+        if SKIP_MANUALLY_TAGGED and (len(existing_tags.value) if existing_tags else 0) > 0:
             logging.info('skipping manually taged file ' + image_path)
             return
         logging.info('classifying  ' + image_path)
@@ -85,14 +85,14 @@ class LLM:
                 ]
             }
         )
-        keywords = json.loads(response.message.content)['keywords']
-        logging.info(keywords)
-        if len(keywords) > 0:
-            keywords = [k.capitalize() for k in keywords] + [FIXED_TAG]
-            if KEEP_EXISTING_TAGS and existing:
-                keywords = list(set(keywords) | set(existing.value))
-            logging.info(keywords)
-            metadata['Iptc.Application2.Keywords'] = keywords
+        tags = json.loads(response.message.content)['keywords']
+        logging.info(tags)
+        if len(tags) > 0:
+            tags = [k.capitalize() for k in tags] + [FIXED_TAG]
+            if KEEP_EXISTING_TAGS and existing_tags:
+                tags = list(set(tags) | set(existing_tags.value))
+            logging.info(tags)
+            metadata['Iptc.Application2.Keywords'] = tags
             metadata.write()
             os.utime(image_path)
 
