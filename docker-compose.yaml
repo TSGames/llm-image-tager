@@ -14,7 +14,14 @@ services:
       OLLAMA_HOST:
       IMAGE_SIZE:
     volumes:
-      - ${IMAGE_PATH}:/mnt/images
+      - "img_share:/mnt/images"
 
 volumes:
   ollama:
+  img_share:
+    driver: local
+    # we need to use a nfs share mount. Otherwise, synology will not detect changes and trigger the indexer
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=127.0.0.1,rw
+      device: ":/volume2/photo/_Test"

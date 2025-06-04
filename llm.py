@@ -39,6 +39,7 @@ class LLM:
         logging.info("Preparing model " + MODEL)
         ollama.pull(MODEL)
 
+    # does not work / has no effect
     def delete_matching_eadir_files(self, image_path):
         if not os.path.isfile(image_path):
             return
@@ -110,7 +111,7 @@ class LLM:
             atime, mtime = os.stat(image_path).st_atime, os.stat(image_path).st_mtime
             metadata.write()
             os.utime(image_path, (atime, mtime))
-            self.delete_matching_eadir_files(image_path)
+            #self.delete_matching_eadir_files(image_path)
 
     def classify_folder(self, folder_path):
         jpeg_files = [f for f in Path(folder_path).rglob("*") if f.suffix.lower() in ['.jpg', '.jpeg']]
