@@ -103,7 +103,7 @@ class LLM:
         tags = json.loads(response.message.content)['keywords']
         logging.info(tags)
         if len(tags) > 0:
-            tags = [k.capitalize() for k in tags] + [FIXED_TAG]
+            tags = [t[:1].upper() + t[1:] for t in tags] + [FIXED_TAG]
             if KEEP_EXISTING_TAGS and existing_tags:
                 tags = list(set(tags) | set(existing_tags.value))
             logging.info(tags)
