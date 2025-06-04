@@ -43,7 +43,7 @@ class LLM:
         if not os.path.isfile(image_path):
             return
         filename = os.path.basename(image_path)
-        root_dir = os.path.dirname(image_path) + "/@eaDi/r"
+        root_dir = os.path.dirname(image_path) + "/@eaDir/"
         shutil.rmtree(root_dir + filename, ignore_errors=True)
         try:
             os.unlink(root_dir + filename + "@SynoEAStream")
