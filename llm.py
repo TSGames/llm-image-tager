@@ -130,7 +130,7 @@ class LLM:
                     pass
         logging.info("Finished classifying " + str(len(jpeg_files)) + " images inside " + folder_path)
         for folder in [f for f in Path(folder_path).glob("*") if f.is_dir() and not any(part == "@eaDir" for part in Path(f).parts)]:
-            self.classify_folder(folder)
+            self.classify_folder(str(folder))
 
 llm = LLM()
 while True:
