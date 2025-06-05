@@ -119,7 +119,13 @@ class LLM:
         for file in jpeg_files:
             if any(part == "@eaDir" for part in file.parts):
                 continue
-            self.classify_file(str(file))
+            while True:
+                try:
+                    self.classify_file(str(file))
+                    break
+                except Exception as e:
+                    logging.warning('classifying  ' + str(file) + 'failed' + str(e))
+                    pass
         logging.info("Finished classifying " + str(len(jpeg_files)) + " images")
 
 llm = LLM()
