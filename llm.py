@@ -114,7 +114,7 @@ class LLM:
             os.utime(image_path, (atime, mtime))
             #self.delete_matching_eadir_files(image_path)
 
-    def classify_folder(self, folder_path):
+    def classify_folder(self, folder_path: str):
         jpeg_files = [f for f in Path(folder_path).glob("*") if f.suffix.lower() in ['.jpg', '.jpeg']]
         logging.info('Read ' + str(len(jpeg_files)) + ' files inside ' + folder_path)
         for file in jpeg_files:
@@ -128,7 +128,7 @@ class LLM:
                     logging.warning('classifying  ' + str(file) + 'failed' + str(e))
                     time.sleep(1 * i)
                     pass
-        logging.info("Finished classifying " + str(len(jpeg_files)) + " images inside ' + folder_path")
+        logging.info("Finished classifying " + str(len(jpeg_files)) + " images inside " + folder_path)
         for folder in [f for f in Path(folder_path).glob("*") if f.is_dir() and not any(part == "@eaDir" for part in Path(f).parts)]:
             self.classify_folder(folder)
 
