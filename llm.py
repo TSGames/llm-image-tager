@@ -23,6 +23,7 @@ OLLAMA_HOST = os.getenv('OLLAMA_HOST', 'http://ollama:11434')
 IMAGE_PATH = os.getenv('IMAGE_PATH', '/mnt/images')
 SLEEP_DURATION_SEC = int(os.getenv('SLEEP_DURATION_SEC', 60))
 IMAGE_SIZE = int(os.getenv('IMAGE_SIZE', 896))
+MAX_RETRIES = int(os.getenv('MAX_RETRIES', 3))
 
 
 logging.basicConfig(
@@ -119,12 +120,13 @@ class LLM:
         for file in jpeg_files:
             if any(part == "@eaDir" for part in file.parts):
                 continue
-            while True:
+            for i in range(0,MAX_RETRIES):
                 try:
                     self.classify_file(str(file))
                     break
                 except Exception as e:
                     logging.warning('classifying  ' + str(file) + 'failed' + str(e))
+                    time.sleep(1 * i)
                     pass
         logging.info("Finished classifying " + str(len(jpeg_files)) + " images")
 
