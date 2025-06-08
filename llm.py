@@ -1,16 +1,18 @@
 import base64
 import json
+import logging
 import os
+import shutil
+import time
 from io import BytesIO
 from pathlib import Path
-import logging
-import time
-import shutil
+
 import ollama
 import pyexiv2
 from PIL import Image
 from PIL.Image import Resampling
-from PIL.ImageOps import expand
+
+Image.MAX_IMAGE_PIXELS = None
 
 MODEL = os.getenv('MODEL', 'gemma3:4b')
 PROMPT = os.getenv('PROMPT', 'Erzeuge 5 bis 10 passende Schlagworte für dieses Bild in Deutsch.')
