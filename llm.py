@@ -46,7 +46,7 @@ class LLM:
         self.check_ollama(True)
         try:
             self.min_m_time = float(next(open(M_TIME_FILE)))
-        except FileNotFoundError as e:
+        except Exception as e:
             pass
     def check_ollama(self, force = False):
         if self.ollama and len(OLLAMA_HOSTS) == 1:
@@ -95,13 +95,13 @@ class LLM:
         mtime = os.stat(image_path).st_mtime
         if self.min_m_time and mtime < self.min_m_time:
             logging.debug('skipping classifying for ' + image_path + " (is older than last run)")
-            return
+            #return
         metadata = pyexiv2.ImageMetadata(image_path)
         metadata.read()
         existing_tags = metadata.get('Iptc.Application2.Keywords', None)
         if existing_tags and FIXED_TAG in existing_tags.value:
             logging.debug('skipping classifying for ' + image_path)
-            return
+            #return
         if SKIP_MANUALLY_TAGGED and (len(existing_tags.value) if existing_tags else 0) > 0:
             logging.debug('skipping manually tagged file ' + image_path)
             return
@@ -139,7 +139,7 @@ class LLM:
                 tags = list(set(tags) | set(existing_tags.value))
             logging.info(tags)
             metadata['Iptc.Application2.Keywords'] = tags
-            atime = os.stat(image_path).st_atime,
+            atime = os.stat(image_path).st_atime
             metadata.write()
             os.utime(image_path, (atime, mtime))
             #self.delete_matching_eadir_files(image_path)
