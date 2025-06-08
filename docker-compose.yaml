@@ -11,7 +11,7 @@ services:
     environment:
       MODEL:
       PROMPT:
-      OLLAMA_HOST:
+      OLLAMA_HOSTS:
       IMAGE_SIZE:
     volumes:
       - "img_share:/mnt/images"
