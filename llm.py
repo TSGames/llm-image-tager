@@ -58,7 +58,7 @@ class LLM:
                         host=host,
                     )
                     self.ollama.pull(MODEL)
-
+                    self.retryOllama = time.time()
                     logging.info("ollama at " + host + " will be used")
                     break
                 except Exception as e:
